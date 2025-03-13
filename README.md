@@ -24,7 +24,7 @@
 ## Rules:
 
 **Major Releases Only**
-- Only publish results from major [**shadPS4 releases**](https://github.com/shadps4-emu/shadPS4/releases) (e.g. 0.6.0).
+- Only publish results from major [**shadPS4 releases**](https://github.com/shadps4-emu/shadPS4/releases) (e.g. v0.7.0).
 
 **Insert All Necessary Information**
 - Make sure you put all the necessary information: **Title**, **Game ID**, **Game Version**, **Emulator Version**, **Compatibility Status** and **Operating System**.
