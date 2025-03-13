@@ -1,0 +1,102 @@
+name: Game Compatibility
+description: Report a game's compatibility status on shadPS4
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Important: Read First
+        - We only accept tests on major releases and not nightly builds. For example: 0.6.0 and not 0.6.1 WIP
+        - Only test officially released Playstation 4 games. You can find a list of games here: https://www.serialstation.com/games/
+        - You've made sure there are no other issues opened for this game and operating system combo.
+        - Your game dump must come from a copy of the game you own.
+        - Your game dump must be unmodified, and you must not enable any game patches. Dumps repackaged to FPKGs will be treated the same way.
+        - Make sure your logging type is set to "sync" and not "async".
+  - type: input
+    id: game-name
+    attributes:
+      label: Game Name
+      placeholder: "Game Name"
+    validations:
+      required: true
+
+  - type: input
+    id: game-code
+    attributes:
+      label: Game code
+      placeholder: "e.g. CUSA10005"
+    validations:
+      required: true
+
+  - type: input
+    id: game-version
+    attributes:
+      label: Game version
+      placeholder: "e.g. v01.00"
+    validations:
+      required: true
+
+  - type: input
+    id: emulator-version
+    attributes:
+      label: Used emulator's version (only major released versions are acceptable)
+      placeholder: "e.g v0.6.0, and not v0.6.1 WIP"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: emulation-status
+    attributes:
+      label: Current status
+      options:
+        - Nothing
+        - Boots
+        - Menus
+        - Ingame
+        - Playable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: Operating-System
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - Linux
+        - macOS
+    validations:
+      required: true
+
+  - type: textarea
+    id: emulation-error
+    attributes:
+      label: Error
+      placeholder: (Leave blank if status is playable) Don't describe what is happening but copy and paste the error in the last lines of log (Often it starts with [Debug] <Critical>)
+    validations:
+      required: false
+
+  - type: textarea
+    id: emulation-description
+    attributes:
+      label: Description
+      placeholder: What can you see, if the sound is good, graphics, glitches, etc ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshots
+      description: Add screenshots here (preferably on windowed mode) if the game is rendering.
+      placeholder: Drag and drop the images/screenshots onto the text area.
+    validations:
+      required: false
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Log File
+      description: Log files can be found in the user/log folder. Make sure the logging type is set to "sync" in the emulator settings.
+      placeholder: Drag and drop the log file onto the text area.
+    validations:
+      required: true

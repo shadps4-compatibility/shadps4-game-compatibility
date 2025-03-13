@@ -1,0 +1,155 @@
+name: Update Compatibility Data
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # Runs every 3 hours
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Generate Compatibility Data
+        run: |
+          BASE_URL="https://api.github.com/repos/shadps4-emu/shadps4-game-compatibility/issues"
+          PER_PAGE=100
+          PAGE=1
+          COMPATIBILITY_DATABASE=$(jq -n '{}')
+
+          fetch_issues() {
+            response=$(curl -s "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}")
+            ITEM_COUNT=$(echo "$response" | jq -r 'length')
+
+            if [ "$ITEM_COUNT" -eq 0 ]; then
+              echo "No more pages found, stopping."
+              return 1
+            fi
+
+            for issue in $(echo "$response" | jq -r '.[] | @base64'); do
+              _jq() {
+                echo ${issue} | base64 --decode | jq -r ${1}
+              }
+
+              TITLE=$( _jq '.title' )
+              ISSUE_NUMBER=$( _jq '.number' )
+              UPDATED_AT=$( _jq '.updated_at' )
+              MILESTONE=$( _jq '.milestone' )
+
+              if [ "$MILESTONE" == "null" ]; then
+                VERSION="unknown"
+              else
+                VERSION=$(echo "$MILESTONE" | jq -r '.title // "unknown"')
+              fi
+
+              LABELS=$( _jq '.labels[].name' )
+              
+              if [[ "$TITLE" =~ (CUSA[0-9]{5}) ]]; then
+                CUSA_ID="${BASH_REMATCH[1]}"
+                OS_TYPE="os-unknown"
+                STATUS="status-unknown"
+
+                for label in $LABELS; do
+                  if [[ "$label" == "os-"* ]]; then
+                    OS_TYPE="$label"
+                  elif [[ "$label" == "status-"* ]]; then
+                    STATUS="$label"
+                  fi
+                done
+
+                COMPATIBILITY_OBJ=$(jq -n \
+                  --arg issue_number "$ISSUE_NUMBER" \
+                  --arg last_tested "$UPDATED_AT" \
+                  --arg status "$STATUS" \
+                  --arg version "$VERSION" \
+                  '{
+                    issue_number: $issue_number,
+                    last_tested: $last_tested,
+                    status: $status,
+                    version: $version
+                  }')
+
+                COMPATIBILITY_DATABASE=$(echo "$COMPATIBILITY_DATABASE" | jq \
+                  --arg CUSA_ID "$CUSA_ID" \
+                  --arg OS_TYPE "$OS_TYPE" \
+                  --argjson COMPATIBILITY_OBJ "$COMPATIBILITY_OBJ" \
+                  'if .[$CUSA_ID] then .[$CUSA_ID] += {($OS_TYPE): $COMPATIBILITY_OBJ} else . + {($CUSA_ID): {($OS_TYPE): $COMPATIBILITY_OBJ}} end')
+              fi
+            done
+
+            return 0
+          }
+
+          while : ; do
+            echo "Fetching page $PAGE"
+            fetch_issues || break
+            PAGE=$((PAGE + 1))
+          done
+
+          # Save the final JSON
+          echo "$COMPATIBILITY_DATABASE" > compatibility_data.json
+
+      - name: Verify Compatibility Data file size
+        run: |
+          FILE_SIZE=$(stat -c %s compatibility_data.json)
+          MAX_FILE_SIZE=307200  # 300 KB in bytes
+
+          if [ "$FILE_SIZE" -lt "$MAX_FILE_SIZE" ]; then
+            echo "Compatibility data file is too small ($FILE_SIZE bytes), skipping release creation."
+            exit 0  # Exit the job to prevent further steps
+          else
+            echo "Compatibility data file is valid ($FILE_SIZE bytes). Proceeding with release creation."
+          fi
+
+      - name: Delete all releases and tags
+        run: |
+          # List all releases
+          RELEASES=$(curl -s -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" https://api.github.com/repos/${{ github.repository }}/releases)
+
+          # Iterate over each release and delete it
+          for release in $(echo "$RELEASES" | jq -r '.[].id'); do
+            echo "Deleting release with ID: $release"
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
+              "https://api.github.com/repos/${{ github.repository }}/releases/$release"
+          done
+
+          # List all tags
+          TAGS=$(curl -s -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" https://api.github.com/repos/${{ github.repository }}/tags)
+
+          # Iterate over each tag and delete it
+          for tag in $(echo "$TAGS" | jq -r '.[].name'); do
+            echo "Deleting tag: $tag"
+            curl -s -X DELETE -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
+              "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/$tag"
+          done
+
+      - name: Create a GitHub Release and Upload Data
+        run: |
+          TAG_NAME="v$(date +'%Y%m%d%H%M%S')"
+          RELEASE_NAME="shadps4-game-compatibility"  # Fixed name for the release
+          BODY="Compatibility data update"
+
+          RESPONSE=$(curl -s \
+            -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
+            -X POST \
+            -d '{
+                  "tag_name": "'"$TAG_NAME"'",
+                  "target_commitish": "main", 
+                  "name": "'"$RELEASE_NAME"'",
+                  "body": "'"$BODY"'",
+                  "draft": false,
+                  "prerelease": false
+                }' \
+            https://api.github.com/repos/${{ github.repository }}/releases)
+
+          # Extract the ID of the created release
+          RELEASE_ID=$(echo "$RESPONSE" | jq -r .id)
+
+          # Upload the data file to the release
+          curl -s \
+            -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary @compatibility_data.json \
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID/assets?name=compatibility_data.json"
