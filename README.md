@@ -38,6 +38,7 @@
 
 **Unmodified Game Dumps**
 - Only publish reports with unmodified game dumps. If any patches or modifications are applied, the report will be removed. Repackaging your dumps to FPKGs will be treated the same way.
+- Downloading and not dumping your own copy of the game is strictly forbidden and will result in a systematic ban.
 
 ## Information:
 
