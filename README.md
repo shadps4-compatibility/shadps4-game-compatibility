@@ -40,7 +40,7 @@
 - Only publish reports with unmodified game dumps. If any patches or modifications are applied, the report will be removed. Repackaging your dumps to FPKGs will be treated the same way.
 
 **Use the comment section only for reporting changes on a new release**
-- This isn't a place to discuss with eachother or to ask for support, only comment when you want to report about new major releases, any off-topic comment will be deleted.
+- This isn't a place for discussion or support requests. Only comment when you want to report about new major releases, any off-topic comments will be deleted.
 
 ## Information:
 
