@@ -38,6 +38,7 @@
 
 **Unmodified Game Dumps**
 - Only publish reports with unmodified game dumps. If any patches or modifications are applied, the report will be removed. Repackaging your dumps to FPKGs will be treated the same way.
+- Piracy of any form is strictly prohibited. Any reports involving pirated game dumps will be removed, and reporters suspected of piracy will be blocked from the shadPS4 repository.
 
 **Use the comment section only for reporting changes on a new release**
 - This isn't a place for discussion or support requests. Only comment when you want to report about new major releases, any off-topic comments will be deleted.
