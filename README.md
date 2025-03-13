@@ -38,7 +38,7 @@
 
 **Unmodified Game Dumps**
 - Only publish reports with unmodified game dumps. If any patches or modifications are applied, the report will be removed. Repackaging your dumps to FPKGs will be treated the same way.
-- Downloading and not dumping your own copy of the game is strictly forbidden and will result in a systematic ban.
+- Piracy of any form is strictly prohibited. Any reports involving pirated game dumps will be removed, and reporters suspected of piracy will be blocked from the shadPS4 repository.
 
 ## Information:
 
