@@ -20,9 +20,9 @@ body:
       required: true
 
   - type: input
-    id: game-code
+    id: game-serial
     attributes:
-      label: Game code
+      label: Game serial
       placeholder: "e.g. CUSA10005"
     validations:
       required: true
