@@ -5,7 +5,7 @@ body:
     attributes:
       value: |
         ## Important: Read First
-        - We only accept tests on major releases and not nightly builds. For example: 0.6.0 and not 0.6.1 WIP
+        - We only accept tests on major releases and not nightly builds. For example: v0.7.0. Do not test on v0.7.1 WIP, or on any forks.
         - Only test officially released Playstation 4 games. You can find a list of games here: https://www.serialstation.com/games/
         - You've made sure there are no other issues opened for this game and operating system combo.
         - Your game dump must come from a copy of the game you own.
@@ -39,7 +39,7 @@ body:
     id: emulator-version
     attributes:
       label: Used emulator's version (only major released versions are acceptable)
-      placeholder: "e.g v0.6.0, and not v0.6.1 WIP"
+      placeholder: "e.g v0.7.0"
     validations:
       required: true
 
