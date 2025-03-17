@@ -4,13 +4,25 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Important: Read First
-        - We only accept tests on major releases and not nightly builds. For example: v0.7.0. Do not test on v0.7.1 WIP, or on any forks.
-        - Only test officially released Playstation 4 games. You can find a list of games here: https://www.serialstation.com/games/
-        - You've made sure there are no other issues opened for this game and operating system combo.
-        - Your game dump must come from a copy of the game you own.
-        - Your game dump must be unmodified, and you must not enable any game patches. Dumps repackaged to FPKGs will be treated the same way.
-        - Make sure your logging type is set to "sync" and not "async".
+         ## Important: Read First
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I've tested on a major release and not on a nightly build (In this case 0.7.0 and not 0.7.1 WIP).
+          required: true
+        - label: My report is made on an officially released Playstation 4 game. (You can find a list of official Playstation 4 games [here](https://www.serialstation.com/games/))
+          required: true
+        - label: I've made sure there are no other issues opened for this game and operating system combo.
+          required: true
+        - label: My game dump comes from a copy of the game I own.
+          required: true
+        - label: My game dump is unmodified, I haven't enabled any game patches and I didn't repackage my game dump to a FPKG.
+          required: true
+        - label: I've made sure my logging type is set to "sync" and not "async".
+          required: true
+           
   - type: input
     id: game-name
     attributes:
