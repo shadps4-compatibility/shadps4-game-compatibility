@@ -20,6 +20,8 @@ body:
           required: true
         - label: My game dump is unmodified, I haven't enabled any game patches and I didn't repackage my game dump to a FPKG.
           required: true
+        - label: I've dumped my PS4 firmware libraries, and placed them in the shadPS4 'user/sys_modules' folder.
+          required: true
         - label: I've made sure my logging type is set to "sync" and not "async".
           required: true
            
