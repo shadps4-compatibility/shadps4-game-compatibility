@@ -40,13 +40,16 @@
 - Only publish reports with unmodified game dumps. If any patches or modifications are applied, the report will be removed. Repackaging your dumps to FPKGs will be treated the same way.
 - Piracy of any form is strictly prohibited. Any reports involving pirated game dumps will be removed, and reporters suspected of piracy will be blocked from the shadPS4 repository.
 
+**Dump your PlayStation 4's system files before reporting**
+- Some PlayStation 4 firmware libraries are required for games to behave properly. Details about the required modules are listed in the information section.
+
 **Use the comment section only for reporting changes on a new release**
 - This isn't a place for discussion or support requests. Only comment when you want to report about new major releases, any off-topic comments will be deleted.
 
 ## Information:
 
-shadPS4 can load some modules in **LLE** mode, some are necessary and some have **HLE** replacements.\
-The following firmware modules are supported and must be placed in the `user/sys_modules` folder.
+shadPS4 can load some PlayStation 4 firmware files, these must be dumped from your legally owned Playstation 4 console.\
+The following firmware modules are supported and must be placed in shadPS4's `user/sys_modules` folder.
 
 <div align="center">
 
