@@ -12,7 +12,7 @@ body:
       options:
         - label: I've tested on a major release and not on a nightly build (In this case 0.7.0 and not 0.7.1 WIP).
           required: true
-        - label: My report is made on an officially released Playstation 4 game. (You can find a list of official Playstation 4 games [here](https://www.serialstation.com/games/))
+        - label: My report is made on an officially released PlayStation 4 game. (You can find a list of official PlayStation 4 games [here](https://www.serialstation.com/games/))
           required: true
         - label: I've made sure there are no other issues opened for this game and operating system combo.
           required: true

@@ -48,7 +48,7 @@
 
 ## Information:
 
-shadPS4 can load some PlayStation 4 firmware files, these must be dumped from your legally owned Playstation 4 console.\
+shadPS4 can load some PlayStation 4 firmware files, these must be dumped from your legally owned PlayStation 4 console.\
 The following firmware modules are supported and must be placed in shadPS4's `user/sys_modules` folder.
 
 <div align="center">
