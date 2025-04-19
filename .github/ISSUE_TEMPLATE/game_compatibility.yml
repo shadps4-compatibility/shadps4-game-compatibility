@@ -10,7 +10,7 @@ body:
     attributes:
       label: Checklist
       options:
-        - label: I've tested on a major release and not on a nightly build (In this case 0.7.0 and not 0.7.1 WIP).
+        - label: I've tested on the [latest major release](https://github.com/shadps4-emu/shadPS4/releases/latest) and not on a nightly build (In this case 0.7.0 and not 0.7.1 WIP).
           required: true
         - label: My report is made on an officially released PlayStation 4 game. (You can find a list of official PlayStation 4 games [here](https://www.serialstation.com/games/))
           required: true
