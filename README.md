@@ -45,6 +45,7 @@
 
 **Use the comment section only for reporting changes on a new release**
 - This isn't a place for discussion or support requests. Only comment when you want to report about new major releases, any off-topic comments will be deleted.
+- When updating a report, do it by providing a log. Comments reporting changes without a log will not be considered.
 
 ## Information:
 
