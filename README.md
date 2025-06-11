@@ -15,11 +15,11 @@
 <img src="https://img.shields.io/github/issues-search/shadps4-emu/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-nothing&style=for-the-badge&color=black&label=Nothing"/>
 </h2>
 
-- **status-playable**: Games that can be run without any issues.
+- **status-playable**: Games that can be played without any major issue.
 - **status-ingame**: Games that can reach gameplay but have issues.
 - **status-menus**: Games that can reach the menu but freeze/crash when trying to proceed further.
-- **status-boots**: Games that show any visual/audio output but freeze/crash before reaching the menu.
-- **status-nothing**: Games that crash when trying to launch or only show a black screen.
+- **status-boots**: Games that show visual or audio output but freeze or crash before reaching the menu.
+- **status-nothing**: Games that crash when trying to launch or hang on a black screen.
 
 ## Rules:
 
@@ -40,6 +40,9 @@
 - Only publish reports with unmodified game dumps. If any patches or modifications are applied, the report will be removed. Repackaging your dumps to FPKGs will be treated the same way.
 - Piracy of any form is strictly prohibited. Any reports involving pirated game dumps will be removed, and reporters suspected of piracy will be blocked from the shadPS4 repository.
 
+**Don't change settings that can impact the game's behavior**
+- Changing settings like "isPS4Pro" or the Vblank Divider can change the way a game behaves, any reports with these settings modified will be closed.
+
 **Dump your PlayStation 4's system files before reporting**
 - Some PlayStation 4 firmware libraries are required for games to behave properly. Details about the required modules are listed in the information section.
 
@@ -50,7 +53,7 @@
 ## Information:
 
 shadPS4 can load some PlayStation 4 firmware files, these must be dumped from your legally owned PlayStation 4 console.\
-The following firmware modules are supported and must be placed in shadPS4's `user/sys_modules` folder.
+The following firmware modules are supported and must be placed in shadPS4's `sys_modules` folder.
 
 <div align="center">
 
@@ -64,4 +67,3 @@ The following firmware modules are supported and must be placed in shadPS4's `us
 
 > [!Caution]
 > The above modules are required to run the games properly and must be extracted from your PlayStation 4.\
-> **We do not provide any information or support on how to do this**.
