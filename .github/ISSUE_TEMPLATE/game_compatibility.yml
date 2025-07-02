@@ -12,7 +12,7 @@ body:
       options:
         - label: I've tested on the [latest major release](https://github.com/shadps4-emu/shadPS4/releases/latest) and not on a nightly build (In this case 0.9.0 and NOT 0.9.1 WIP).
           required: true
-        - label: My report is made on an officially released PlayStation 4 game. (You can find a list of official PlayStation 4 games [here](https://www.serialstation.com/games/))
+        - label: My report is made on an officially released PlayStation 4 game. (You can find a list of official PlayStation 4 games [here](https://www.serialstation.com/games/?systems=97ec53a2-f676-4c89-8172-e653dce5eed1))
           required: true
         - label: I've made sure there are no other issues opened for this game and operating system combo.
           required: true
@@ -85,7 +85,7 @@ body:
     id: emulation-error
     attributes:
       label: Error
-      placeholder: (Leave blank if status is playable) Don't describe what is happening but copy and paste the error in the last lines of log (Often it starts with [Debug] <Critical>)
+      placeholder: Don't describe what is happening but copy and paste the error in the last lines of log (Often it starts with [Debug] <Critical>)
     validations:
       required: false
 
