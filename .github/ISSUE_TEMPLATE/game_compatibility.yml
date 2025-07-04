@@ -24,6 +24,8 @@ body:
           required: true
         - label: I've made sure my logging type is set to "sync" and not "async".
           required: true
+        - label: I did not manually enable any settings that would change emulation behavior (such as "Vulkan Validation", "readbacks", "directMemoryAccess", "isPS4Pro" etc).
+          required: true          
            
   - type: input
     id: game-name
