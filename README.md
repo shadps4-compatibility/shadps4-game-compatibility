@@ -24,7 +24,7 @@
 ## Rules:
 
 **Major Releases Only**
-- Only publish results from major [**shadPS4 releases**](https://github.com/shadps4-emu/shadPS4/releases/latest) (e.g. v0.9.0).
+- Only publish results from major [**shadPS4 releases**](https://github.com/shadps4-emu/shadPS4/releases/latest) (e.g. v0.10.0).
 
 **Insert All Necessary Information**
 - Make sure you put all the necessary information: **Title**, **Game ID**, **Game Version**, **Emulator Version**, **Compatibility Status** and **Operating System**.
@@ -41,7 +41,7 @@
 - Piracy of any form is strictly prohibited. Any reports involving pirated game dumps will be removed, and reporters suspected of piracy will be blocked from the shadPS4 repository.
 
 **Don't change settings that can impact the game's behavior**
-- Changing settings like "isPS4Pro", "isDevKitConsole" or the Vblank Divider can change the way a game behaves, any reports with these settings modified will be closed.
+- Changing settings like "isPS4Pro", "isDevKitConsole", "readbacks", "directMemoryAccess" or the Vblank Divider can change the way a game behaves, any reports with these settings modified will be closed.
 
 **Dump your PlayStation 4's system files before reporting**
 - Some PlayStation 4 firmware libraries are required for games to behave properly. Details about the required modules are listed in the information section.
