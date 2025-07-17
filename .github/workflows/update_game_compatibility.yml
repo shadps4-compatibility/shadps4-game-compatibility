@@ -2,15 +2,16 @@ name: Update Compatibility Data
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # Runs every 3 hours
-  workflow_dispatch:  # Allows manual execution
+    - cron: '0 */3 * * *'  # Every 3 hours
+  workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Generate Compatibility Data
         run: |
@@ -19,110 +20,111 @@ jobs:
           PAGE=1
           COMPATIBILITY_DATABASE=$(jq -n '{}')
 
-          fetch_issues() {
-            response=$(curl -s "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}")
-            ITEM_COUNT=$(echo "$response" | jq -r 'length')
+          fetch_all_issues() {
+            while :; do
+              echo "Fetching page $PAGE..."
+              curl -s -D headers.txt -o body.json "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}"
 
-            if [ "$ITEM_COUNT" -eq 0 ]; then
-              echo "No more pages found, stopping."
-              return 1
-            fi
-
-            for issue in $(echo "$response" | jq -r '.[] | @base64'); do
-              _jq() {
-                echo ${issue} | base64 --decode | jq -r ${1}
-              }
-
-              TITLE=$( _jq '.title' )
-              ISSUE_NUMBER=$( _jq '.number' )
-              UPDATED_AT=$( _jq '.updated_at' )
-              MILESTONE=$( _jq '.milestone' )
-
-              if [ "$MILESTONE" == "null" ]; then
-                VERSION="unknown"
-              else
-                VERSION=$(echo "$MILESTONE" | jq -r '.title // "unknown"')
+              if ! jq empty body.json > /dev/null 2>&1; then
+                echo "Invalid JSON response from GitHub:"
+                cat body.json
+                exit 1
               fi
 
-              LABELS=$( _jq '.labels[].name' )
-              
-              if [[ "$TITLE" =~ (CUSA[0-9]{5}) ]]; then
-                CUSA_ID="${BASH_REMATCH[1]}"
-                OS_TYPE="os-unknown"
-                STATUS="status-unknown"
-
-                for label in $LABELS; do
-                  if [[ "$label" == "os-"* ]]; then
-                    OS_TYPE="$label"
-                  elif [[ "$label" == "status-"* ]]; then
-                    STATUS="$label"
-                  fi
-                done
-
-                COMPATIBILITY_OBJ=$(jq -n \
-                  --arg issue_number "$ISSUE_NUMBER" \
-                  --arg last_tested "$UPDATED_AT" \
-                  --arg status "$STATUS" \
-                  --arg version "$VERSION" \
-                  '{
-                    issue_number: $issue_number,
-                    last_tested: $last_tested,
-                    status: $status,
-                    version: $version
-                  }')
-
-                COMPATIBILITY_DATABASE=$(echo "$COMPATIBILITY_DATABASE" | jq \
-                  --arg CUSA_ID "$CUSA_ID" \
-                  --arg OS_TYPE "$OS_TYPE" \
-                  --argjson COMPATIBILITY_OBJ "$COMPATIBILITY_OBJ" \
-                  'if .[$CUSA_ID] then .[$CUSA_ID] += {($OS_TYPE): $COMPATIBILITY_OBJ} else . + {($CUSA_ID): {($OS_TYPE): $COMPATIBILITY_OBJ}} end')
+              ITEM_COUNT=$(jq 'length' body.json)
+              if [ "$ITEM_COUNT" -eq 0 ]; then
+                echo "No items returned, stopping."
+                break
               fi
+
+              for issue in $(jq -r '.[] | @base64' body.json); do
+                _jq() {
+                  echo "$issue" | base64 --decode | jq -r "$1"
+                }
+
+                TITLE=$(_jq '.title')
+                ISSUE_NUMBER=$(_jq '.number')
+                UPDATED_AT=$(_jq '.updated_at')
+                MILESTONE=$(_jq '.milestone')
+
+                if [ "$MILESTONE" == "null" ]; then
+                  VERSION="unknown"
+                else
+                  VERSION=$(echo "$MILESTONE" | jq -r '.title // "unknown"')
+                fi
+
+                LABELS=$(_jq '.labels | map(.name) | .[]')
+
+                if [[ "$TITLE" =~ (CUSA[0-9]{5}) ]]; then
+                  CUSA_ID="${BASH_REMATCH[1]}"
+                  OS_TYPE="os-unknown"
+                  STATUS="status-unknown"
+
+                  for label in $LABELS; do
+                    [[ "$label" == os-* ]] && OS_TYPE="$label"
+                    [[ "$label" == status-* ]] && STATUS="$label"
+                  done
+
+                  COMPATIBILITY_OBJ=$(jq -n \
+                    --arg issue_number "$ISSUE_NUMBER" \
+                    --arg last_tested "$UPDATED_AT" \
+                    --arg status "$STATUS" \
+                    --arg version "$VERSION" \
+                    '{
+                      issue_number: $issue_number,
+                      last_tested: $last_tested,
+                      status: $status,
+                      version: $version
+                    }')
+
+                  COMPATIBILITY_DATABASE=$(echo "$COMPATIBILITY_DATABASE" | jq \
+                    --arg CUSA_ID "$CUSA_ID" \
+                    --arg OS_TYPE "$OS_TYPE" \
+                    --argjson COMPATIBILITY_OBJ "$COMPATIBILITY_OBJ" \
+                    'if .[$CUSA_ID] then .[$CUSA_ID] += {($OS_TYPE): $COMPATIBILITY_OBJ} else . + {($CUSA_ID): {($OS_TYPE): $COMPATIBILITY_OBJ}} end')
+                fi
+              done
+
+              if ! grep -qi 'rel="next"' headers.txt; then
+                echo "No more pages."
+                break
+              fi
+
+              PAGE=$((PAGE + 1))
             done
 
-            return 0
+            echo "$COMPATIBILITY_DATABASE" > compatibility_data.json
           }
 
-          while : ; do
-            echo "Fetching page $PAGE"
-            fetch_issues || break
-            PAGE=$((PAGE + 1))
-          done
-
-          # Save the final JSON
-          echo "$COMPATIBILITY_DATABASE" > compatibility_data.json
+          fetch_all_issues
 
       - name: Verify Compatibility Data file size
         run: |
           FILE_SIZE=$(stat -c %s compatibility_data.json)
-          MAX_FILE_SIZE=307200  # 300 KB in bytes
+          MAX_FILE_SIZE=307200  # 300 KB
 
           if [ "$FILE_SIZE" -lt "$MAX_FILE_SIZE" ]; then
             echo "Compatibility data file is too small ($FILE_SIZE bytes), skipping release creation."
-            exit 0  # Exit the job to prevent further steps
+            exit 0
           else
-            echo "Compatibility data file is valid ($FILE_SIZE bytes). Proceeding with release creation."
+            echo "Compatibility data file is valid ($FILE_SIZE bytes). Proceeding."
           fi
 
       - name: Delete all releases and tags
         run: |
-          # List all releases
-          RELEASES=$(curl -s -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" https://api.github.com/repos/${{ github.repository }}/releases)
+          TOKEN="${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}"
+          REPO="${{ github.repository }}"
 
-          # Iterate over each release and delete it
-          for release in $(echo "$RELEASES" | jq -r '.[].id'); do
-            echo "Deleting release with ID: $release"
-            curl -s -X DELETE -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
-              "https://api.github.com/repos/${{ github.repository }}/releases/$release"
+          RELEASES=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/releases)
+          for release_id in $(echo "$RELEASES" | jq -r '.[].id'); do
+            echo "Deleting release ID $release_id"
+            curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/releases/$release_id"
           done
 
-          # List all tags
-          TAGS=$(curl -s -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" https://api.github.com/repos/${{ github.repository }}/tags)
-
-          # Iterate over each tag and delete it
+          TAGS=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/tags)
           for tag in $(echo "$TAGS" | jq -r '.[].name'); do
-            echo "Deleting tag: $tag"
-            curl -s -X DELETE -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
-              "https://api.github.com/repos/${{ github.repository }}/git/refs/tags/$tag"
+            echo "Deleting tag $tag"
+            curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/git/refs/tags/$tag"
           done
 
       - name: Create a GitHub Release and Upload Data
