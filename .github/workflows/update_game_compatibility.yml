@@ -2,12 +2,13 @@ name: Update Compatibility Data
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # Runs every 3 hours
-  workflow_dispatch:  # Allows manual execution
+    - cron: '0 */3 * * *'  # Every 3 hours
+  workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,16 +23,21 @@ jobs:
           fetch_all_issues() {
             while :; do
               echo "Fetching page $PAGE..."
-              RESPONSE=$(curl -s -D headers.txt "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}")
-              BODY=$(tail -n +$(($(grep -n '^$' headers.txt | cut -d: -f1 | head -n1) + 1)) <<< "$RESPONSE")
-              ITEM_COUNT=$(echo "$BODY" | jq 'length')
+              curl -s -D headers.txt -o body.json "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}"
 
+              if ! jq empty body.json > /dev/null 2>&1; then
+                echo "Invalid JSON response from GitHub:"
+                cat body.json
+                exit 1
+              fi
+
+              ITEM_COUNT=$(jq 'length' body.json)
               if [ "$ITEM_COUNT" -eq 0 ]; then
                 echo "No items returned, stopping."
                 break
               fi
 
-              for issue in $(echo "$BODY" | jq -r '.[] | @base64'); do
+              for issue in $(jq -r '.[] | @base64' body.json); do
                 _jq() {
                   echo "$issue" | base64 --decode | jq -r "$1"
                 }
@@ -101,7 +107,7 @@ jobs:
             echo "Compatibility data file is too small ($FILE_SIZE bytes), skipping release creation."
             exit 0
           else
-            echo "Compatibility data file is valid ($FILE_SIZE bytes). Proceeding with release creation."
+            echo "Compatibility data file is valid ($FILE_SIZE bytes). Proceeding."
           fi
 
       - name: Delete all releases and tags
@@ -109,21 +115,19 @@ jobs:
           TOKEN="${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}"
           REPO="${{ github.repository }}"
 
-          # Delete releases
           RELEASES=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/releases)
           for release_id in $(echo "$RELEASES" | jq -r '.[].id'); do
             echo "Deleting release ID $release_id"
             curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/releases/$release_id"
           done
 
-          # Delete tags
           TAGS=$(curl -s -H "Authorization: token $TOKEN" https://api.github.com/repos/$REPO/tags)
           for tag in $(echo "$TAGS" | jq -r '.[].name'); do
             echo "Deleting tag $tag"
             curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/git/refs/tags/$tag"
           done
 
-      - name: Create a GitHub Release and Upload Data
+      - name: Create GitHub Release and Upload Data
         run: |
           TOKEN="${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}"
           REPO="${{ github.repository }}"
@@ -135,25 +139,23 @@ jobs:
             -H "Authorization: token $TOKEN" \
             -X POST \
             -d '{
-                  "tag_name": "'"$TAG_NAME"'",
-                  "target_commitish": "main",
-                  "name": "'"$RELEASE_NAME"'",
-                  "body": "'"$BODY"'",
-                  "draft": false,
-                  "prerelease": false
-                }' \
+              "tag_name": "'"$TAG_NAME"'",
+              "target_commitish": "main",
+              "name": "'"$RELEASE_NAME"'",
+              "body": "'"$BODY"'",
+              "draft": false,
+              "prerelease": false
+            }' \
             https://api.github.com/repos/$REPO/releases)
 
           RELEASE_ID=$(echo "$RESPONSE" | jq -r .id)
-
           if [ "$RELEASE_ID" == "null" ] || [ -z "$RELEASE_ID" ]; then
-            echo "Release creation failed!"
+            echo "Release creation failed:"
             echo "$RESPONSE"
             exit 1
           fi
 
-          echo "Uploading compatibility_data.json to release $RELEASE_ID"
-
+          echo "Uploading compatibility_data.json..."
           curl -s \
             -H "Authorization: token $TOKEN" \
             -H "Content-Type: application/octet-stream" \
