@@ -3,16 +3,16 @@
 </h1>
 
 <h2 align="center">
-<a href="https://github.com/shadps4-emu/shadps4-game-compatibility/labels/status-playable">
-    <img src="https://img.shields.io/github/issues-search/shadps4-emu/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-playable&style=for-the-badge&color=8BA503&label=Playable"/>
-<a href="https://github.com/shadps4-emu/shadps4-game-compatibility/labels/status-ingame">
-    <img src="https://img.shields.io/github/issues-search/shadps4-emu/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-ingame&style=for-the-badge&color=F3BB00&label=Ingame"/>
-<a href="https://github.com/shadps4-emu/shadps4-game-compatibility/labels/status-menus">
-    <img src="https://img.shields.io/github/issues-search/shadps4-emu/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-menus&style=for-the-badge&color=FF5C1A&label=Menus"/>
-<a href="https://github.com/shadps4-emu/shadps4-game-compatibility/labels/status-boots">
-    <img src="https://img.shields.io/github/issues-search/shadps4-emu/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-boots&style=for-the-badge&color=A7001E&label=Boots"/>
-<a href="https://github.com/shadps4-emu/shadps4-game-compatibility/labels/status-nothing">
-<img src="https://img.shields.io/github/issues-search/shadps4-emu/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-nothing&style=for-the-badge&color=black&label=Nothing"/>
+<a href="https://github.com/shadps4-compatibility/shadps4-game-compatibility/labels/status-playable">
+    <img src="https://img.shields.io/github/issues-search/shadps4-compatibility/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-playable&style=for-the-badge&color=8BA503&label=Playable"/>
+<a href="https://github.com/shadps4-compatibility/shadps4-game-compatibility/labels/status-ingame">
+    <img src="https://img.shields.io/github/issues-search/shadps4-compatibility/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-ingame&style=for-the-badge&color=F3BB00&label=Ingame"/>
+<a href="https://github.com/shadps4-compatibility/shadps4-game-compatibility/labels/status-menus">
+    <img src="https://img.shields.io/github/issues-search/shadps4-compatibility/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-menus&style=for-the-badge&color=FF5C1A&label=Menus"/>
+<a href="https://github.com/shadps4-compatibility/shadps4-game-compatibility/labels/status-boots">
+    <img src="https://img.shields.io/github/issues-search/shadps4-compatibility/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-boots&style=for-the-badge&color=A7001E&label=Boots"/>
+<a href="https://github.com/shadps4-compatibility/shadps4-game-compatibility/labels/status-nothing">
+<img src="https://img.shields.io/github/issues-search/shadps4-compatibility/shadps4-game-compatibility?query=is%3Aopen+label%3Astatus-nothing&style=for-the-badge&color=black&label=Nothing"/>
 </h2>
 
 - **status-playable**: Games that can be played without any major issue.
