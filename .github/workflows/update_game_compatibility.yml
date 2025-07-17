@@ -127,37 +127,31 @@ jobs:
             curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/git/refs/tags/$tag"
           done
 
-      - name: Create GitHub Release and Upload Data
+      - name: Create a GitHub Release and Upload Data
         run: |
-          TOKEN="${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}"
-          REPO="${{ github.repository }}"
           TAG_NAME="v$(date +'%Y%m%d%H%M%S')"
-          RELEASE_NAME="shadps4-game-compatibility"
+          RELEASE_NAME="shadps4-game-compatibility"  # Fixed name for the release
           BODY="Compatibility data update"
 
           RESPONSE=$(curl -s \
-            -H "Authorization: token $TOKEN" \
+            -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
             -X POST \
             -d '{
-              "tag_name": "'"$TAG_NAME"'",
-              "target_commitish": "main",
-              "name": "'"$RELEASE_NAME"'",
-              "body": "'"$BODY"'",
-              "draft": false,
-              "prerelease": false
-            }' \
-            https://api.github.com/repos/$REPO/releases)
+                  "tag_name": "'"$TAG_NAME"'",
+                  "target_commitish": "main", 
+                  "name": "'"$RELEASE_NAME"'",
+                  "body": "'"$BODY"'",
+                  "draft": false,
+                  "prerelease": false
+                }' \
+            https://api.github.com/repos/${{ github.repository }}/releases)
 
+          # Extract the ID of the created release
           RELEASE_ID=$(echo "$RESPONSE" | jq -r .id)
-          if [ "$RELEASE_ID" == "null" ] || [ -z "$RELEASE_ID" ]; then
-            echo "Release creation failed:"
-            echo "$RESPONSE"
-            exit 1
-          fi
 
-          echo "Uploading compatibility_data.json..."
+          # Upload the data file to the release
           curl -s \
-            -H "Authorization: token $TOKEN" \
+            -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" \
             -H "Content-Type: application/octet-stream" \
             --data-binary @compatibility_data.json \
-            "https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=compatibility_data.json"
+            "https://uploads.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID/assets?name=compatibility_data.json"
