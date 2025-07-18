@@ -22,7 +22,7 @@ jobs:
 
           fetch_issues() {
             echo "Fetching page $PAGE..."
-            curl -s -D headers.txt -o body.json "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}"
+            curl -s -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" -D headers.txt -o body.json "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}"
 
             # Validate JSON
             if ! jq empty body.json > /dev/null 2>&1; then
