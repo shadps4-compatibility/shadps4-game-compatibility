@@ -49,6 +49,7 @@
 
 **Don't manually edit your log before posting it**
 - Logs should be untouched, doing things such as trimming lines that are repeated over and over to make it more "readable" isn't something you should do, leave the log as is.
+- In the rare case where the crash assert wouldn't show because the log file exceeds 100MB, using a log filter is allowed, but make sure to mention this in the report.
 
 **Use the comment section only for reporting changes on a new release**
 - This isn't a place for discussion or support requests. Only comment when you want to report about new major releases, any off-topic comments will be deleted.
