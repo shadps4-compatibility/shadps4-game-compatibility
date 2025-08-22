@@ -33,7 +33,7 @@
 - ...when the OS is different, we allow one report per system-OS (Windows, Linux and macOS). So duplicate entries can exist if they are for different OS.
 - ...if the CUSA is different (e.g. Bloodborne = CUSA00900 & CUSA03173)
 
-**Do not report a game with a already existing entry with the same CUSA and OS**
+**Do not report a game with an already existing entry with the same CUSA and OS**
 - If the CUSA and OS is the same as an older report, comment on the older report with the game's new status, a description of how it behaved, any screenshots you took, and a log.
 
 **Unmodified Game Dumps**
@@ -46,6 +46,10 @@
 
 **Dump your PlayStation 4's system files before reporting**
 - Some PlayStation 4 firmware libraries are required for games to behave properly. Details about the required modules are listed in the information section.
+
+**Don't manually edit your log before posting it**
+- Logs should be untouched, doing things such as trimming lines that are repeated over and over to make it more "readable" isn't something you should do, leave the log as is.
+- In the rare case where the crash assert wouldn't show because the log file exceeds 100MB, using a log filter is allowed, but make sure to mention this in the report.
 
 **Use the comment section only for reporting changes on a new release**
 - This isn't a place for discussion or support requests. Only comment when you want to report about new major releases, any off-topic comments will be deleted.
