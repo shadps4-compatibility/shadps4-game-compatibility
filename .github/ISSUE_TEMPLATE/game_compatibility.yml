@@ -24,7 +24,7 @@ body:
           required: true
         - label: I've made sure my logging type is set to "sync" and not "async".
           required: true
-        - label: I did not manually enable any settings that would change emulation behavior (such as "isPS4Pro", "isDevKit", "Vblank Divider" etc).
+        - label: I did not manually enable any settings that would change emulation behavior (such as "isPS4Pro", "isDevKit", "Vblank Frequency" etc).
           required: true          
            
   - type: input
