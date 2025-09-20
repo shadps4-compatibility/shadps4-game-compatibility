@@ -58,7 +58,8 @@
 ## Information:
 
 shadPS4 can load some PlayStation 4 firmware files, these must be dumped from your legally owned PlayStation 4 console.\
-The following firmware modules are supported and must be placed in shadPS4's `sys_modules` folder.
+The following firmware modules are supported and must be placed in shadPS4's `sys_modules` folder.\
+For more information on how to dump your firmware files, you can check the [shadPS4 wiki](https://github.com/shadps4-emu/shadPS4/wiki/I.-Quick-start-%5BUsers%5D#4-dumping-firmware-modules).
 
 <div align="center">
 
