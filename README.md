@@ -66,8 +66,9 @@ For more information on how to dump your firmware files, you can check the [shad
 | Modules                 | Modules                 | Modules                 | Modules                 |  
 |-------------------------|-------------------------|-------------------------|-------------------------|  
 | libSceCesCs.sprx        | libSceFont.sprx         | libSceFontFt.sprx       | libSceFreeTypeOt.sprx   |
-| libSceJson.sprx         | libSceJson2.sprx        | libSceLibcInternal.sprx | libSceNgs2.sprx         |  
-| libSceUlt.sprx          |                         |                         |                         |  
+| libSceJpegDec.sprx      | libSceJpegEnc.sprx      | libSceJson.sprx         | libSceJson2.sprx        |  
+| libSceLibcInternal.sprx | libSceNgs2.sprx         | libScePngEnc.sprx       | libSceRtc.sprx          |
+| libSceUlt.sprx          | libSceAudiodec.sprx     |                         |                         |
 
 </div>
 
