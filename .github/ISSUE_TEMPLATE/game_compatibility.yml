@@ -22,7 +22,7 @@ body:
           required: true
         - label: I've dumped my PlayStation 4's firmware libraries, and placed all that the [compatibility list description](https://github.com/shadps4-compatibility/shadps4-game-compatibility?tab=readme-ov-file#information) mentions in the shadPS4 'sys_modules' folder.
           required: true
-        - label: I've made sure my logging type is set to "sync" and not "async".
+        - label: I've made sure my logging option "sync" is ticked.
           required: true
         - label: I did not manually enable any settings that would change emulation behavior (such as "isPS4Pro", "isDevKit", "Vblank Frequency" etc).
           required: true          
@@ -112,7 +112,7 @@ body:
     id: log
     attributes:
       label: Log File
-      description: Log files can be found in the user/log folder. Make sure the logging type is set to "sync" in the emulator settings.
+      description: Log files can be found in the user/log folder. Make sure the logging option "sync" is ticked in the emulator settings.
       placeholder: Drag and drop the log file onto the text area.
     validations:
       required: true
