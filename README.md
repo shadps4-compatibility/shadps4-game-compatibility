@@ -41,8 +41,8 @@
 - Piracy of any form is strictly prohibited. Any reports involving pirated game dumps will be removed, and reporters suspected of piracy will be blocked from the shadPS4 repository.
 
 **Don't change settings that can impact the game's behavior**
-- Changing settings like "isPS4Pro", "isDevKitConsole", or the Vblank Frequency can change the way a game behaves, any reports with these settings modified will be closed.
-- Some settings, like readbacks or direct memory access are permitted, and reports with them enabled will be tagged with the "experimental" tag for easy searching.
+- Changing settings like "Enable PS4 Neo Mode", "Enable Devkit Console Mode", or the Vblank Frequency can change the way a game behaves, any reports with these settings modified will be closed.
+- Some settings, like Readbacks, Readback Linear Images or Direct Memory Access are permitted, and reports with them enabled will be tagged with the "experimental" label for easy searching.
 
 **Dump your PlayStation 4's system files before reporting**
 - Some PlayStation 4 firmware libraries are required for games to behave properly. Details about the required modules are listed in the information section.
