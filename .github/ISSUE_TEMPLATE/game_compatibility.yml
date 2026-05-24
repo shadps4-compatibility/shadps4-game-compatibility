@@ -83,6 +83,22 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: processor
+    attributes:
+      label: Processor
+      placeholder: What processor your device has. Some examples include the Intel Core i9-13900K or AMD Ryzen 7 9800X3D
+    validations:
+      required: false
+
+  - type: input
+    id: graphics-card
+    attributes:
+      label: Graphics Card
+      placeholder: What graphics card your device has. Some examples include the Intel Arc B580, AMD Radeon RX 9060 XT, or Nvidia Geforce RTX 5080
+    validations:
+      required: false
+
   - type: textarea
     id: emulation-error
     attributes:
