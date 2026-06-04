@@ -16,7 +16,8 @@
 </h2>
 
 - **status-playable**: Games that can be played without any major issue.
-- **status-ingame**: Games that can reach gameplay but have issues.
+- **status-ingame**: Games that can reach gameplay but have game-breaking issues.
+  - We consider crashes, hangs, graphical issues like texture corruption and vertex explosions, and broken audio as potentially game-breaking issues.
 - **status-menus**: Games that can reach the menu but freeze/crash when trying to proceed further.
 - **status-boots**: Games that show visual or audio output but freeze or crash before reaching the menu.
 - **status-nothing**: Games that crash when trying to launch or hang on a black screen.
