@@ -84,7 +84,7 @@ jobs:
                     title: $title,
                     last_tested: $last_tested,
                     status: $status,
-                    version: $version
+                    version: $version,
                     labels: $labels
                   }')
 
