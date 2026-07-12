@@ -60,6 +60,7 @@ jobs:
               fi
 
               LABELS=$(_jq '.labels | map(.name) | .[]')
+              LABELS_JSON=$(_jq '.labels | map(.name)')
 
               if [[ "$TITLE" =~ (CUSA[0-9]{5}) ]]; then
                 CUSA_ID="${BASH_REMATCH[1]}"
@@ -73,14 +74,18 @@ jobs:
 
                 COMPATIBILITY_OBJ=$(jq -n \
                   --arg issue_number "$ISSUE_NUMBER" \
+                  --arg title "$TITLE" \
                   --arg last_tested "$UPDATED_AT" \
                   --arg status "$STATUS" \
                   --arg version "$VERSION" \
+                  --argjson labels "$LABELS_JSON" \
                   '{
                     issue_number: $issue_number,
+                    title: $title,
                     last_tested: $last_tested,
                     status: $status,
-                    version: $version
+                    version: $version,
+                    labels: $labels
                   }')
 
                 COMPATIBILITY_DATABASE=$(echo "$COMPATIBILITY_DATABASE" | jq \
