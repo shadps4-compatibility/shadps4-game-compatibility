@@ -20,6 +20,17 @@ jobs:
           PAGE=1
           COMPATIBILITY_DATABASE=$(jq -n '{}')
 
+          # Pull a single-line value out of an issue-form body.
+          #   $1 = issue body, $2 = form label (e.g. "Game Name")
+          field() {
+            printf '%s\n' "$1" | tr -d '\r' | awk -v label="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')" '
+              { l = tolower($0) }
+              l ~ "^###[ \t]*" label "[ \t]*$" { f = 1; next }
+              /^###/ { f = 0 }
+              f && NF { gsub(/^[ \t]+|[ \t]+$/, ""); print; exit }
+            '
+          }
+
           fetch_issues() {
             echo "Fetching page $PAGE..."
             curl -s -H "Authorization: token ${{ secrets.SHADPS4_TOKEN_COMPATIBILITY }}" -D headers.txt -o body.json "${BASE_URL}?per_page=${PER_PAGE}&page=${PAGE}"
@@ -49,6 +60,7 @@ jobs:
               }
 
               TITLE=$(_jq '.title')
+              ISSUE_BODY=$(_jq '.body // ""')
               ISSUE_NUMBER=$(_jq '.number')
               UPDATED_AT=$(_jq '.updated_at')
               MILESTONE=$(_jq '.milestone')
@@ -62,8 +74,20 @@ jobs:
               LABELS=$(_jq '.labels | map(.name) | .[]')
               LABELS_JSON=$(_jq '.labels | map(.name)')
 
-              if [[ "$TITLE" =~ (CUSA[0-9]{5}) ]]; then
-                CUSA_ID="${BASH_REMATCH[1]}"
+              # --- serial: prefer the form field, fall back to the title -------
+              SERIAL=$(field "$ISSUE_BODY" "Game serial" | grep -ioE '[A-Z]{4}[0-9]{5}' | head -n1 | tr '[:lower:]' '[:upper:]')
+              if [ -z "$SERIAL" ]; then
+                SERIAL=$(printf '%s' "$TITLE" | grep -ioE 'CUSA[0-9]{5}' | head -n1 | tr '[:lower:]' '[:upper:]')
+              fi
+
+              # --- name: prefer the form field, fall back to the title ---------
+              NAME=$(field "$ISSUE_BODY" "Game Name")
+              if [ -z "$NAME" ]; then
+                NAME=$(printf '%s' "$TITLE" | sed -E 's/^[[:space:]]*[A-Z]{4}[0-9]{5}[[:space:]]*[-–—:]?[[:space:]]*//I')
+              fi
+
+              if [ -n "$SERIAL" ]; then
+                CUSA_ID="$SERIAL"
                 OS_TYPE="os-unknown"
                 STATUS="status-unknown"
 
@@ -74,14 +98,16 @@ jobs:
 
                 COMPATIBILITY_OBJ=$(jq -n \
                   --arg issue_number "$ISSUE_NUMBER" \
-                  --arg title "$TITLE" \
+                  --arg name "$NAME" \
+                  --arg serial "$SERIAL" \
                   --arg last_tested "$UPDATED_AT" \
                   --arg status "$STATUS" \
                   --arg version "$VERSION" \
                   --argjson labels "$LABELS_JSON" \
                   '{
                     issue_number: $issue_number,
-                    title: $title,
+                    name: $name,
+                    serial: $serial,
                     last_tested: $last_tested,
                     status: $status,
                     version: $version,
