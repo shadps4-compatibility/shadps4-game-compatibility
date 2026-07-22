@@ -1,6 +1,8 @@
 name: Update Compatibility Data
 
 on:
+  push:
+    branches: [ main ] # Every time there is a push on main
   schedule:
     - cron: '0 */3 * * *'  # Every 3 hours
   workflow_dispatch:
