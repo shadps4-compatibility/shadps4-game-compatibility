@@ -66,13 +66,15 @@ For more information on how to dump your firmware files, you can check the [shad
 
 | Modules                        | Modules                        | Modules                        | Modules                        |
 |--------------------------------|--------------------------------|--------------------------------|--------------------------------|
-| libSceAudiodec.sprx            | libSceAudiodecCpu.sprx         | libSceAudiodecCpuDdp.sprx      | libSceAudiodecCpuDtsHdLbr.sprx |
-| libSceAudiodecCpuHevag.sprx    | libSceAudiodecCpuM4aac.sprx    | libSceCesCs.sprx               | libSceFont.sprx                |
-| libSceFontFt.sprx              | libSceFreeTypeOl.sprx          | libSceFreeTypeOptOl.sprx       | libSceFreeTypeOt.sprx          |
-| libSceJpegDec.sprx             | libSceJpegEnc.sprx             | libSceJson.sprx                | libSceJson2.sprx               |
-| libSceLibcInternal.sprx        | libSceNgs2.sprx                | libScePngEnc.sprx              | libSceRtc.sprx                 |
-| libSceRudp.sprx                | libSceSystemGesture.sprx       | libSceUlt.sprx                 | libSceWkFontConfig.sprx        |
-| libSceXml.sprx                 | libSceAt9Enc.sprx              |
+| libSceAt9Enc.sprx              | libSceAudiodec.sprx            | libSceAudiodecCpu.sprx         | libSceAudiodecCpuDdp.sprx      |
+| libSceAudiodecCpuDtsHdLbr.sprx | libSceAudiodecCpuHevag.sprx    | libSceAudiodecCpuM4aac.sprx    | libSceAvPlayer.sprx            |
+| libSceAvPlayerStreaming.sprx   | libSceBeisobmf.sprx            | libSceBemp2sys.sprx            | libSceCesCs.sprx               |
+| libSceFont.sprx                | libSceFontFt.sprx              | libSceFreeTypeOl.sprx          | libSceFreeTypeOptOl.sprx       |
+| libSceFreeTypeOt.sprx          | libSceJpegDec.sprx             | libSceJpegEnc.sprx             | libSceJson.sprx                |
+| libSceJson2.sprx               | libSceLibcInternal.sprx        | libSceNgs2.sprx                | libScePngEnc.sprx              |
+| libScePsmKitSystem.sprx        | libSceRtc.sprx                 | libSceRudp.sprx                | libSceSystemGesture.sprx       |
+| libSceUlt.sprx                 | libSceWkFontConfig.sprx        | libSceXml.sprx                 | libSceDepth.sprx               |
+| libScePadTracker.sprx          | libSceMoveTracker.sprx         |
 </div>
 
 </div>
