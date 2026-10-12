@@ -105,7 +105,6 @@ jobs:
                   --arg last_tested "$UPDATED_AT" \
                   --arg status "$STATUS" \
                   --arg version "$VERSION" \
-                  --arg milestone "$MILESTONE" \
                   --argjson labels "$LABELS_JSON" \
                   '{
                     issue_number: $issue_number,
@@ -114,7 +113,6 @@ jobs:
                     last_tested: $last_tested,
                     status: $status,
                     version: $version,
-                    milestone: $milestone,
                     labels: $labels
                   }')
 
